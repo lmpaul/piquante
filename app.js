@@ -1,5 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 // Creating the express app
 const app = express()
@@ -8,7 +11,7 @@ const app = express()
 const userRoutes = require('./routes/user')
 
 // Connecting to the database
-mongoose.connect('mongodb+srv://lmpaul:rK7GUv2ER1vzpVa6@piquantecluster0.ceb0vvx.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect( process.env.MONGODBURL,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
