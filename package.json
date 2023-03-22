@@ -1,0 +1,9 @@
+{
+  "name": "piquante",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "git@github.com:lmpaul/piquante.git",
+  "author": "Paul Le Mercier <paul.lemercier05@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
