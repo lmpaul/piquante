@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const app = express()
 
 // Importing the routers
-
+const userRoutes = require('./routes/user')
 
 // Connecting to the database
 mongoose.connect('mongodb+srv://lmpaul:rK7GUv2ER1vzpVa6@piquantecluster0.ceb0vvx.mongodb.net/?retryWrites=true&w=majority',
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 // Configuring the app routing
-
+app.use('/api/auth', userRoutes)
 
 
 module.exports = app
