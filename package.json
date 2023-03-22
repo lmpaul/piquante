@@ -5,5 +5,10 @@
   "repository": "git@github.com:lmpaul/piquante.git",
   "author": "Paul Le Mercier <paul.lemercier05@gmail.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.2",
+    "nodemon": "^2.0.21"
+  }
 }
