@@ -4,11 +4,18 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
+
 // Creating the express app
 const app = express()
 
+// Getting access to server path (for images)
+const path = require('path');
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+
 // Importing the routers
 const userRoutes = require('./routes/user')
+const sauceRoutes = require('./routes/sauce')
 
 // Connecting to the database
 mongoose.connect( process.env.MONGODBURL,
@@ -29,6 +36,8 @@ app.use((req, res, next) => {
 
 // Configuring the app routing
 app.use('/api/auth', userRoutes)
+app.use('/api/sauces', sauceRoutes)
+
 
 
 module.exports = app

@@ -8,17 +8,14 @@ exports.signup = async (req, res, next) => {
   let hash
 
   try {
-    console.log(req.body)
     hash = await bcrypt.hash(req.body.password, 10)
   } catch (error) {
     console.log(error)
     res.status(500).json({error})
   }
-  console.log(hash)
 
   // creating a user
   try {
-    console.log(req.body)
     const user = new User({
       email: req.body.email,
       password: hash

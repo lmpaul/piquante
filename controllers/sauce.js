@@ -3,16 +3,32 @@ const Sauce = require('../models/Sauce')
 
 exports.getAllSauces = async (req, res) => {
   try {
-    const sauce = Sauce.find()
+    const sauces = await Sauce.find()
     res.status(200).json(sauces)
   } catch (error) {
-    res.status(400).json({message: 'La requête a échoué.', error})
+    res.status(400).json({message: 'La requête a échoué.', error: error})
   }
 }
 
+exports.getOneSauce = async (req, res) => {
+  try {
+    const sauce = await Sauce.findOne({_id: req.params.id})
+    res.status(200).json({sauce})
+  } catch (error) {
+    res.status(400).json({message: 'La requête a échoué.', error: error})
+  }
+}
+
+
 exports.createSauce = async (req, res) => {
-  delete(req.body._id)
-  const sauce = new Sauce({...req.body})
+  const sauceObject = JSON.parse(req.body.sauce)
+  delete sauceObject._id
+  delete sauceObject.userId
+  const sauce = new Sauce({...sauceObject,
+                          userId: req.auth.userId,
+                          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                        })
+
   try {
     await sauce.save()
     res.status(201).json({message: 'Sauce enregistrée'})
