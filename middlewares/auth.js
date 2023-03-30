@@ -6,7 +6,9 @@ module.exports = (req, res, next) => {
     const decotedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET')
     const userId = decotedToken.userId
     req.auth = { userId }
+    next()
   } catch (error) {
     res.status(401).json({error});
   }
+
 }

@@ -24,9 +24,12 @@ exports.createSauce = async (req, res) => {
   const sauceObject = JSON.parse(req.body.sauce)
   delete sauceObject._id
   delete sauceObject.userId
+  console.log(sauceObject)
   const sauce = new Sauce({...sauceObject,
                           userId: req.auth.userId,
-                          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+                          likes: 0,
+                          dislikes: 0
                         })
 
   try {
