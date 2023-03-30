@@ -1,6 +1,5 @@
 node_modules
 .DS_Store
-images
 .env
 
 # prevent from uploading the content of images folder, but not the folder itself
