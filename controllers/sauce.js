@@ -13,12 +13,11 @@ exports.getAllSauces = async (req, res) => {
 exports.getOneSauce = async (req, res) => {
   try {
     const sauce = await Sauce.findOne({_id: req.params.id})
-    res.status(200).json({sauce})
+    res.status(200).json(sauce)
   } catch (error) {
     res.status(400).json({message: 'La requête a échoué.', error: error})
   }
 }
-
 
 exports.createSauce = async (req, res) => {
   const sauceObject = JSON.parse(req.body.sauce)
@@ -47,4 +46,8 @@ exports.deleteSauce = async (req, res) => {
   } catch (error) {
     res.status(400).json({message: "La sauce n'a pas été supprimée.", error})
   }
+}
+
+exports.modifySauce = async (req, res) => {
+
 }
