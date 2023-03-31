@@ -1,3 +1,4 @@
+const fs = require('fs')
 const Sauce = require('../models/Sauce')
 
 
@@ -42,11 +43,26 @@ exports.createSauce = async (req, res) => {
 
 exports.deleteSauce = async (req, res) => {
   try {
-    await Sauce.deleteOne({_id: req.params.id})
-    res.status(200).json({message: 'Article supprimé.'})
+    const sauce = await Sauce.findOne({_id: req.params.id})
+    if (sauce.userId !== req.auth.userId) {
+      res.status(401).json({message: 'Non authorisé'})
+    } else {
+      const filename = sauce.imageUrl.split('/images/')[1]
+      fs.unlink(`images/${filename}`, async () => {
+        try {
+          await Sauce.deleteOne({_id: req.params.id})
+          res.status(200).json({message: 'Objet supprimé'})
+        } catch (error) {
+          res.status(400).json({message: 'Erreur lors de la suppression'})
+        }
+
+      })
+
+    }
   } catch (error) {
-    res.status(400).json({message: "La sauce n'a pas été supprimée.", error})
+    res.status(400).json({error})
   }
+
 }
 
 exports.modifySauce = async (req, res) => {
