@@ -50,20 +50,20 @@ exports.deleteSauce = async (req, res) => {
 }
 
 exports.modifySauce = async (req, res) => {
-  console.log(req.body)
   const sauceObject = req.file ? {
     ...JSON.parse(req.body.sauce),
-    iamgeUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : {...req.body}
 
   delete sauceObject.userId
+
   try {
     const sauce = await Sauce.findOne({_id: req.params.id})
     if (sauce.userId !== req.auth.userId) {
       res.status(401).json({message: 'Modification non autorisée.'})
     } else {
       await Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
-      res.status(200)
+      res.status(200).json({message: 'Modification réussie.'})
     }
   } catch (error) {
     res.status(400).json({ error })
