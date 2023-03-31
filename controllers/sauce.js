@@ -62,7 +62,6 @@ exports.deleteSauce = async (req, res) => {
   } catch (error) {
     res.status(400).json({error})
   }
-
 }
 
 exports.modifySauce = async (req, res) => {
@@ -86,4 +85,39 @@ exports.modifySauce = async (req, res) => {
   }
 
 
+}
+
+exports.likeSauce = async (req, res) => {
+  try {
+    const sauce = await Sauce.findOne({_id: req.params.id})
+    const sauceObject = JSON.parse(JSON.stringify(sauce))
+
+    let message
+    if (req.body.like === 1 && !sauceObject.usersLiked.includes(req.body.userId)) {
+      // like
+      sauceObject.usersLiked.push(req.body.userId)
+      sauceObject.likes += 1
+      message = 'Like enregistré'
+    } else if (req.body.like === -1 && !sauceObject.usersDisliked.includes(req.body.userId)) {
+      // dislike
+      sauceObject.usersDisliked.push(req.body.userId)
+      sauceObject.dislikes += 1
+      message = 'Dislike enregistré'
+    } else if (req.body.like === 0 && sauceObject.usersLiked.includes(req.body.userId)) {
+      // cancel like
+      sauceObject.usersLiked = sauceObject.usersLiked.filter(id => id !== req.body.userId)
+      sauceObject.likes -= 1
+      message = 'Like annulé'
+    } else if (req.body.like === 0 && sauceObject.usersDisliked.includes(req.body.userId)) {
+      // cancel dislike
+      sauceObject.usersDisliked = sauceObject.usersDisliked.filter(id => id !== req.body.userId)
+      sauceObject.dislikes -= 1
+      message = 'Like annulé'
+    }
+    await Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
+    res.status(200).json({message: message})
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({error})
+  }
 }
