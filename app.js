@@ -18,7 +18,7 @@ const userRoutes = require('./routes/user')
 const sauceRoutes = require('./routes/sauce')
 
 // Connecting to the database
-mongoose.connect( process.env.MONGODBURL,
+mongoose.connect( process.env.MONGODB_URL,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
