@@ -55,7 +55,6 @@ exports.deleteSauce = async (req, res) => {
         } catch (error) {
           res.status(400).json({message: 'Erreur lors de la suppression'})
         }
-
       })
 
     }
@@ -77,8 +76,15 @@ exports.modifySauce = async (req, res) => {
     if (sauce.userId !== req.auth.userId) {
       res.status(401).json({message: 'Modification non autorisée.'})
     } else {
-      await Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
-      res.status(200).json({message: 'Modification réussie.'})
+      const filename = sauce.imageUrl.split('/images/')[1]
+      fs.unlink(`images/${filename}`, async () => {
+        try {
+          await Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
+          res.status(200).json({message: 'Modification réussie.'})
+        } catch (error) {
+          res.status(400).json({message: 'Erreur lors de la modeification.'})
+        }
+      })
     }
   } catch (error) {
     res.status(400).json({ error })
